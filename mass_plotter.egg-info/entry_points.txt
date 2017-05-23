@@ -1,0 +1,5 @@
+[emzed_package]
+extension = mass_plotter
+main = mass_plotter.app:run
+package = mass_plotter
+

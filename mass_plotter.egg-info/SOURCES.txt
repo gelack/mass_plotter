@@ -1,0 +1,10 @@
+README
+setup.py
+mass_plotter/__init__.py
+mass_plotter/app.py
+mass_plotter/minimal_module.py
+mass_plotter.egg-info/PKG-INFO
+mass_plotter.egg-info/SOURCES.txt
+mass_plotter.egg-info/dependency_links.txt
+mass_plotter.egg-info/entry_points.txt
+mass_plotter.egg-info/top_level.txt
