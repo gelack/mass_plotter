@@ -40,18 +40,18 @@ def gui_get_XIC_params():
     .addDirectory('Please choose result directory')\
     .addChoice("Format", format_choice, default=0,\
                             help='File format for spectra plot. Possible formats: pdf, png, svg')\
-    .addFloat('mz', help='mass-to-charge ratio m/z')\
+    .addText('mz', help='mass-to-charge ratios m/z, divided by line breaks')\
     .addFloat("mz deviation (ppm)", default=5.0, help="deviation from mz in parts per million")\
     .addFloat('rtmin (minutes)', default=0.0, help='lower boundary of retention time')\
     .addFloat("rtmax (minutes)", default=0.0, help="upper boundary of retention time")\
     .show()
-    peakmap_path, results_directory, format_select, mz, mz_dev_ppm, rtmin, rtmax = params
+    peakmap_path, results_directory, format_select, mzs_text, mz_dev_ppm, rtmin, rtmax = params
     rtmin, rtmax = pl.to_seconds((rtmin, rtmax))
     if (rtmin, rtmax) == (0.0,0.0):
         (rtmin, rtmax) = (None, None)
-    mzmin,mzmax = pl.mz_boundaries(mz, mz_dev_ppm) 
+    mzs=  get_float_from_text(mzs_text)  
     format_ = format_choice[format_select]
-    params = peakmap_path, results_directory, format_, mzmin, mzmax, rtmin, rtmax
+    params = peakmap_path, results_directory, format_, mzs, mz_dev_ppm, rtmin, rtmax
     return params
 
 def gui_get_plot_spectrum_params():
@@ -101,6 +101,17 @@ def get_int_from_text(text):
                 print "Please provide a number as input"
         return int_list
 
+def get_float_from_text(text):
+        '''return each line represents one integer'''
+        float_list_string =  text.splitlines()
+        float_list = []
+        for item in float_list_string:
+            try: 
+                float_ = float(item)
+                float_list.append(float_)
+            except ValueError:
+                print "Please provide a proper float as input"
+        return float_list
 
 
 def plot_tic(__):
@@ -112,9 +123,11 @@ def plot_tic(__):
     
 def plot_xic(__):
     params = gui_get_XIC_params()
-    peakmap_path, results_directory, format_, mzmin, mzmax, rtmin, rtmax = params
+    peakmap_path, results_directory, format_, mzs, mz_dev_ppm, rtmin, rtmax = params
     pm = emzed.io.loadPeakMap(peakmap_path)
-    pl.plot_xic(pm, results_directory, mzmin=mzmin, mzmax=mzmax, rtmin=rtmin, rtmax=rtmax, format_=format_)
+    for mz in mzs:
+        mzmin,mzmax = pl.mz_boundaries(mz, mz_dev_ppm) 
+        pl.plot_xic(pm, results_directory, mzmin=mzmin, mzmax=mzmax, rtmin=rtmin, rtmax=rtmax, format_=format_)
 
 def plot_spectrum(__):
     params = gui_get_plot_spectrum_params()
