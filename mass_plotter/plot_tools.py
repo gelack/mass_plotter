@@ -20,6 +20,17 @@ def to_minutes(ic):
         time_min.append(time/60)
     return time_min
 
+def to_seconds(time_list):
+    time_sec = []
+    for time in time_list:
+        time_sec.append(time*60)
+    return time_sec
+    
+def mz_boundaries(mz, mz_dev_ppm):
+    mzmin=mz - mz*mz_dev_ppm*1e-6
+    mzmax=mz + mz*mz_dev_ppm*1e-6
+    return mzmin, mzmax
+
 def plot_ic(ic, file_target, plot_title=None, line_label=None, box_title=None):
     """
     Plots an Ion Chromatogram (ic) derived from pm.chromatogramm. 

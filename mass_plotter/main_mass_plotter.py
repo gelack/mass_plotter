@@ -3,6 +3,8 @@
 Created on Mon Jan 23 22:04:03 2017
 
 @author: GLackner
+
+Version 1.1
 """
 import os
 import emzed
@@ -39,19 +41,17 @@ def gui_get_XIC_params():
     .addDirectory('Please choose result directory')\
     .addChoice("Format", format_choice, default=0,\
                             help='File format for spectra plot. Possible formats: pdf, png, svg')\
-    .addFloat('mzmin', help='lower boundary of mz')\
-    .addFloat("mzmax", help="upper boundary of mz")\
-    .addFloat('rtmin', default=0.0, help='lower boundary of retention time')\
-    .addFloat("rtmax", default=0.0, help="upper boundary of retention time")\
+    .addFloat('mz', help='mass-to-charge ratio m/z')\
+    .addFloat("mz deviation (ppm)", default=5.0, help="deviation from mz in parts per million")\
+    .addFloat('rtmin (minutes)', default=0.0, help='lower boundary of retention time')\
+    .addFloat("rtmax (minutes)", default=0.0, help="upper boundary of retention time")\
     .show()
-    peakmap_path, results_directory, format_select, mzmin, mzmax, rtmin, rtmax = params
-    rtmin = rtmin*60 #compute seconds
-    rtmax = rtmax*60
+    peakmap_path, results_directory, format_select, mz, mz_dev_ppm, rtmin, rtmax = params
+    rtmin, rtmax = pl.to_seconds((rtmin, rtmax))
     if (rtmin, rtmax) == (0.0,0.0):
         (rtmin, rtmax) = (None, None)
-
+    mzmin,mzmax = pl.mz_boundaries(mz, mz_dev_ppm) 
     format_ = format_choice[format_select]
-    
     params = peakmap_path, results_directory, format_, mzmin, mzmax, rtmin, rtmax
     return params
 
