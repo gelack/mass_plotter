@@ -25,8 +25,7 @@ def gui_get_TIC_params():
     .addFloat("rtmax", default=0.0, help="upper boundary of retention time")\
     .show()
     peakmap_path, results_directory, format_select, rtmin, rtmax = params
-    rtmin = rtmin*60 #compute seconds
-    rtmax = rtmax*60
+    rtmin, rtmax = pl.to_seconds((rtmin, rtmax))
     if (rtmin, rtmax) == (0.0,0.0):
         (rtmin, rtmax) = (None, None)
     format_ = format_choice[format_select]
