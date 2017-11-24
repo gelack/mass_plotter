@@ -278,7 +278,7 @@ def export_as_mgf(mass_spec, file_target, decimals=5):
         mz = "%s" % format(peak[0], format_str)
         intensity = "%i " % peak[1]
         f.write("%s\t%s\n" % (mz, intensity))
-    f.write("END_IONS")
+    f.write("END IONS")
     f.close()
     return
     
